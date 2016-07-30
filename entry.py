@@ -11,13 +11,15 @@ class Entry(object):
         username: username for the website
         password: password for the website
         URL: the address of the website
+        tag: tag used cluster for labels
         doc: date of change - used to remind users of need to change password
     """
-    def __init__(self, name, username, password, URL):
+    def __init__(self, name, username, password, tag, URL):
         self.name = name
         self.username = username
         self.password = password
         self.URL = URL
+        self.tag = tag
         self.doc = datetime.now()
 
     def display (self, showPassword = False):
@@ -28,6 +30,7 @@ class Entry(object):
         else:
             print "Password = ", "*" * len(self.password)
         print "URL = ", self.URL
+        print "Tag = ", self.tag
         print "Date of change = ", self.doc
         print "\n"
 
@@ -35,15 +38,16 @@ class Entry(object):
         self.username = change.username
         self.password = change.password
         self.URL = change.URL
+        self.tag = change.tag
         self.doc = datetime.now()
 
 
 def test():
-    pass1 = Entry("facebook", "srivathsan", "asjhdkajhds", "www.facebook.com")
+    pass1 = Entry("facebook", "srivathsan", "asjhdkajhds","internet", "www.facebook.com")
     pass1.display()
 
     pass1.display(True)
-    change = Entry("facebook", "sri", "akdshkajd", "sfd")
+    change = Entry("facebook", "sri", "akdshkajd","internet",  "sfd")
     pass1.edit(change)
     pass1.display(True)
 
