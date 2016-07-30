@@ -1,6 +1,7 @@
 import entry
 import passGen
 import utils
+import yaml
 
 class Database(object):
   """ Database - contains the various entries for pyPass
@@ -17,12 +18,17 @@ class Database(object):
     self.entries = {}
     self.dbChanged = False
 
-  def readDatabase(self, filepath):
+  def readDatabase(self, yamlStr):
     print "Reading database..."
+    self.entries = yaml.load(yamlStr)
     print "Read ", len(self.entries), " entries"
+    self.entries["fb"].display()
 
   def writeDatabase(self, filepath):
     print "Writing to database"
+    yamlStr = yaml.dump(self.entries)
+    return yamlStr;
+
 
   def addEntry(self):
     print "New Entry..."
@@ -110,8 +116,9 @@ class Database(object):
 def test():
   db = Database()
   db.addEntry()
-  db.editEntry("fb")
-  db.delEntry("fb")
+  db.addEntry()
+  ys = db.writeDatabase("")
+  db.readDatabase(ys)
 
 
 if __name__ == "__main__":
