@@ -1,7 +1,10 @@
 import entry
 import passGen
 import utils
+import security
+
 import yaml
+import errno
 
 class Database(object):
   """ Database - contains the various entries for pyPass
@@ -10,6 +13,7 @@ class Database(object):
   Attributes:
       entries: list of entries that store user data (better with dict)
       filepath: filepath for database
+      password: database master password
   """
   def __init__(self):
     print "Database"
@@ -18,16 +22,39 @@ class Database(object):
     self.entries = {}
     self.dbChanged = False
 
-  def readDatabase(self, yamlStr):
-    print "Reading database..."
-    self.entries = yaml.load(yamlStr)
-    print "Read ", len(self.entries), " entries"
-    self.entries["fb"].display()
+  def newDB(self):
+    print "New Database"
+    self.password = raw_input("Enter master password : ")
+    self.filepath = raw_input("Enter file path : ")
+    self.entries = {}
+    self.dbChanged = False
+    self.writeDatabase()
 
-  def writeDatabase(self, filepath):
+  def readDatabase(self, filepath):
+    print "Reading database..."
+    passwd = raw_input("Enter master password : ")
+    with open(filepath, 'r') as f:
+      data = f.read()
+      yamlStr = security.decrypt(data, passwd)
+      try:
+        self = yaml.load(yamlStr)
+      except:
+        print 'incorrect password'
+        return False
+    print "Read {} entries.".format(len(self.entries))
+    return True
+
+  def writeDatabase(self):
     print "Writing to database"
-    yamlStr = yaml.dump(self.entries)
-    return yamlStr;
+    passwd = raw_input("Enter master password : ")
+    if not passwd == self.password:
+      print "Password doesnt match"
+
+    yamlStr = yaml.dump(self)
+    encryptStr = security.encrypt(yamlStr, self.password)
+    with open(self.filepath, 'w') as f:
+        f.write(encryptStr)
+        print "Database written to disk"
 
 
   def addEntry(self):
@@ -115,11 +142,11 @@ class Database(object):
 
 def test():
   db = Database()
-  db.addEntry()
-  db.addEntry()
-  ys = db.writeDatabase("")
-  db.readDatabase(ys)
+  #db.newDB()
+  #db.addEntry()
+  #db.writeDatabase()
 
+  db.readDatabase('./db.bin')
 
 if __name__ == "__main__":
   test()
