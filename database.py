@@ -41,12 +41,14 @@ class Database(object):
     newEntry = entry.Entry(name, username, password, "internet", URL)
     self.entries[name]= newEntry
     copyToClipboard = utils.choice("Copy password to clipboard? (Y/n)")
+    print "\n"
     return True;
 
   def listEntries(self):
     print "Entries..."
-    for entryName in self.entries:
+    for entryName in self.entries.keys():
       print " -> ", entryName
+    print "\n"
 
   def openEntry(self, name):
     if self.entries.has_key(name):
@@ -54,16 +56,20 @@ class Database(object):
     else:
       print "No entry with the name ", name
 
-  def delEntry(self):
-    print "Deleting Entry ", name ,"..."
-    del self.entries[name]
+  def delEntry(self, name):
+    if self.entries.has_key(name):
+      print "Deleting Entry ", name ,"..."
+      del self.entries[name]
+    else:
+      print "Cant find entry ", name , "!!"
 
 def test():
   db = Database()
   db.addEntry()
-  db.addEntry()
   db.listEntries()
   db.openEntry("fb")
+  db.delEntry("fb")
+  db.delEntry("bf")
 
 
 if __name__ == "__main__":
