@@ -4,7 +4,7 @@
 
 # pyPass Settings
 #pyPassDir = "$HOME/.pyPass/"
-pyPassdir = "./"
+pyPassDir = "./"
 encrypt = False
 
 ## Password settings
@@ -13,3 +13,9 @@ useUpper = True
 useLower = True
 useDigits = True
 useSpecial = True
+
+## security settings
+saltSize = 16
+numberOfIterations = 20
+AESMultiple = 16
+

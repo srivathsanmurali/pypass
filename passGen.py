@@ -1,21 +1,21 @@
 import string
 import random
+import config
 
-def getRandomPass(passSize = 10, useUpper = True, useLower = True, useDigits = True, useSpecial = True):
+def getRandomPass():
     chars = "";
-    if useUpper:
+    if config.useUpper:
         chars = chars + string.ascii_uppercase
-    if useLower:
+    if config.useLower:
         chars = chars + string.ascii_lowercase
-    if useDigits:
+    if config.useDigits:
         chars = chars + string.digits
-    if useSpecial:
+    if config.useSpecial:
         chars = chars + "!\"#$%&'()*+,-.:;<=>?@[\]^_`{|}~"
-    return ''.join(random.SystemRandom().choice(chars) for _ in range(passSize))
+    return ''.join(random.SystemRandom().choice(chars) for _ in range(config.passSize))
 
 def test():
     print getRandomPass();
-    print getRandomPass(15, True, True, False, True)
     print getRandomPass()
 
 if __name__ == "__main__":
